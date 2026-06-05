@@ -246,7 +246,6 @@ export default function BoardingPass() {
         </div>
       </div>
       </div>
-      </div>
 
       {activeStopover && (
         <StopoverOverlay stopover={activeStopover} onClose={() => setActiveStopover(null)} />
