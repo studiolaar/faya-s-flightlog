@@ -29,6 +29,7 @@ function PolaroidPile({ photos }) {
               width: `${s.w}%`,
               transform: `rotate(${s.rot}deg)`,
               padding: '3.5%',
+              borderRadius: '4px 4px 16px 16px',
               boxShadow: '0 6px 14px rgba(0,0,0,0.22)',
               zIndex: i,
             }}
