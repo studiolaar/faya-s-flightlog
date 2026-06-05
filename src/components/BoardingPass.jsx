@@ -5,7 +5,7 @@ import StopoverOverlay from './StopoverOverlay'
 // Base design width (the card's natural layout width). The whole card scales
 // proportionally from this — narrower on mobile, up to MAX_W on desktop.
 const BASE_W = 390
-const MAX_W  = 600
+const MAX_W  = 720
 
 // ─── KLM logo — white div masked by the logo shape ───────────────────────────
 function KlmLogo() {
