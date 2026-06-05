@@ -1,6 +1,11 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useLayoutEffect } from 'react'
 import { passenger, flightInfo, stopovers, openDestinations, assets } from '../data'
 import StopoverOverlay from './StopoverOverlay'
+
+// Base design width (the card's natural layout width). The whole card scales
+// proportionally from this — narrower on mobile, up to MAX_W on desktop.
+const BASE_W = 430
+const MAX_W  = 600
 
 // ─── KLM logo — white div masked by the logo shape ───────────────────────────
 function KlmLogo() {
@@ -73,34 +78,60 @@ function OpenDestRow({ hint }) {
 export default function BoardingPass() {
   const [activeStopover, setActiveStopover] = useState(null)
 
-  // Measure tear line Y positions inside the card body for punch-out notches
+  // Refs for fluid scaling + notch measurement
+  const frameRef    = useRef(null)  // available-width container
+  const cardRef     = useRef(null)  // fixed BASE_W card that gets scaled
   const cardBodyRef = useRef(null)
   const tear1Ref    = useRef(null)
   const tear2Ref    = useRef(null)
+  const [scale, setScale] = useState(null)
+  const [frameHeight, setFrameHeight] = useState(undefined)
   const [notchY, setNotchY] = useState({ y1: null, y2: null })
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     function measure() {
-      if (!cardBodyRef.current || !tear1Ref.current || !tear2Ref.current) return
-      const cardRect = cardBodyRef.current.getBoundingClientRect()
-      const t1 = tear1Ref.current.getBoundingClientRect()
-      const t2 = tear2Ref.current.getBoundingClientRect()
-      setNotchY({
-        y1: Math.round(t1.top + t1.height / 2 - cardRect.top),
-        y2: Math.round(t2.top + t2.height / 2 - cardRect.top),
-      })
+      if (!frameRef.current || !cardRef.current) return
+      const availW = frameRef.current.clientWidth
+      const s = availW / BASE_W
+      const naturalH = cardRef.current.scrollHeight // layout height, ignores transform
+      setScale(s)
+      setFrameHeight(naturalH * s)
+      // Notch Y positions via offsetTop (transform-independent), relative to cardBody
+      const t1 = tear1Ref.current, t2 = tear2Ref.current
+      if (t1 && t2) {
+        setNotchY({
+          y1: Math.round(t1.offsetTop + t1.offsetHeight / 2),
+          y2: Math.round(t2.offsetTop + t2.offsetHeight / 2),
+        })
+      }
     }
     measure()
     window.addEventListener('resize', measure)
-    return () => window.removeEventListener('resize', measure)
+    // Recompute when content height changes (images loading, font swap)
+    const ro = new ResizeObserver(measure)
+    if (cardRef.current) ro.observe(cardRef.current)
+    return () => { window.removeEventListener('resize', measure); ro.disconnect() }
   }, [])
 
-  // Notch circle size
-  const R = 11 // px radius
+  // Notch circle size (in base-design px; scales with the card)
+  const R = 11
 
   return (
     <>
-      <div className="relative w-full">
+      {/* Frame holds the scaled card; its height tracks the scaled card height */}
+      <div
+        ref={frameRef}
+        style={{ width: '100%', maxWidth: MAX_W, margin: '0 auto', height: frameHeight }}
+      >
+      <div
+        ref={cardRef}
+        className="relative"
+        style={{
+          width: BASE_W,
+          transformOrigin: 'top left',
+          transform: scale ? `scale(${scale})` : undefined,
+        }}
+      >
 
         {/* ── HEADER (sky blue) ──────────────────────────────────────────── */}
         {/* overflow:visible + z-30 so the badge straddles the seam above the body */}
@@ -213,6 +244,8 @@ export default function BoardingPass() {
             <span className="font-mono text-[11px] text-[#788999] tracking-[2.4px]">FAYA30 · 2026</span>
           </div>
         </div>
+      </div>
+      </div>
       </div>
 
       {activeStopover && (

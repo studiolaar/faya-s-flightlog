@@ -3,9 +3,9 @@ import BoardingPass from './components/BoardingPass'
 export default function App() {
   return (
     /* min-h-screen keeps the bg gradient full height even on short content */
-    <div className="min-h-screen w-full py-8 px-4 flex justify-center">
-      {/* On desktop the card centres with extra horizontal breathing room */}
-      <div className="w-full max-w-[420px] lg:max-w-[480px]">
+    <div className="min-h-screen w-full py-6 sm:py-10 px-4 flex justify-center">
+      {/* BoardingPass scales itself fluidly; this just provides centering + padding */}
+      <div className="w-full" style={{ maxWidth: 600 }}>
         <BoardingPass />
       </div>
     </div>
