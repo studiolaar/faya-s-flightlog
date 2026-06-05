@@ -4,7 +4,7 @@ import StopoverOverlay from './StopoverOverlay'
 
 // Base design width (the card's natural layout width). The whole card scales
 // proportionally from this — narrower on mobile, up to MAX_W on desktop.
-const BASE_W = 430
+const BASE_W = 390
 const MAX_W  = 600
 
 // ─── KLM logo — white div masked by the logo shape ───────────────────────────
@@ -86,7 +86,7 @@ export default function BoardingPass() {
   const tear2Ref    = useRef(null)
   const [scale, setScale] = useState(null)
   const [frameHeight, setFrameHeight] = useState(undefined)
-  const [notchY, setNotchY] = useState({ y1: null, y2: null })
+  const [maskImage, setMaskImage] = useState(undefined)
 
   useLayoutEffect(() => {
     function measure() {
@@ -96,25 +96,34 @@ export default function BoardingPass() {
       const naturalH = cardRef.current.scrollHeight // layout height, ignores transform
       setScale(s)
       setFrameHeight(naturalH * s)
-      // Notch Y positions via offsetTop (transform-independent), relative to cardBody
+
+      // Build a mask that punches real ticket holes at the tear lines so the
+      // page background shows through (works on any bg, incl. iOS Safari).
+      const body = cardBodyRef.current
       const t1 = tear1Ref.current, t2 = tear2Ref.current
-      if (t1 && t2) {
-        setNotchY({
-          y1: Math.round(t1.offsetTop + t1.offsetHeight / 2),
-          y2: Math.round(t2.offsetTop + t2.offsetHeight / 2),
-        })
+      if (body && t1 && t2) {
+        const W = BASE_W
+        const H = Math.round(body.offsetHeight)
+        const y1 = Math.round(t1.offsetTop + t1.offsetHeight / 2)
+        const y2 = Math.round(t2.offsetTop + t2.offsetHeight / 2)
+        const R = 11
+        const hole = (cx, cy) =>
+          `M ${cx - R} ${cy} a ${R} ${R} 0 1 0 ${2 * R} 0 a ${R} ${R} 0 1 0 ${-2 * R} 0 z`
+        const d =
+          `M0 0 H${W} V${H} H0 Z ` +
+          hole(0, y1) + hole(W, y1) + hole(0, y2) + hole(W, y2)
+        const svg =
+          `<svg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${H}'>` +
+          `<path d='${d}' fill='black' fill-rule='evenodd'/></svg>`
+        setMaskImage(`url("data:image/svg+xml,${encodeURIComponent(svg)}")`)
       }
     }
     measure()
     window.addEventListener('resize', measure)
-    // Recompute when content height changes (images loading, font swap)
     const ro = new ResizeObserver(measure)
     if (cardRef.current) ro.observe(cardRef.current)
     return () => { window.removeEventListener('resize', measure); ro.disconnect() }
   }, [])
-
-  // Notch circle size (in base-design px; scales with the card)
-  const R = 11
 
   return (
     <>
@@ -140,7 +149,7 @@ export default function BoardingPass() {
           {/* "new destination" badge — bottom-right, straddling header/body seam */}
           <div
             className="absolute z-20 flex items-center justify-center"
-            style={{ width: 90, height: 90, right: -6, bottom: -45 }}
+            style={{ width: 90, height: 90, right: -6, bottom: -5 }}
           >
             <img src={assets.newDestCircle} alt="" className="absolute inset-0 w-full h-full" />
             <img src={assets.newDestPlane}  alt="" className="absolute inset-0 w-full h-full object-contain p-3" />
@@ -166,27 +175,19 @@ export default function BoardingPass() {
           </div>
         </div>
 
-        {/* ── BODY — overflow:hidden so notch circles get clipped to half ── */}
-        <div ref={cardBodyRef} className="bg-[#EDF9FE] rounded-b-[14px] overflow-hidden px-5 pt-7 pb-8 relative">
-
-          {/* Punch-out notch circles — absolutely positioned at card edges,
-              half outside, clipped by overflow:hidden → looks like ticket holes */}
-          {notchY.y1 !== null && [notchY.y1, notchY.y2].map((y, i) => (
-            <div key={i}>
-              <div style={{
-                position: 'absolute', left: -R, top: y - R,
-                width: R * 2, height: R * 2, borderRadius: '50%',
-                background: 'linear-gradient(180deg,#00A1E4 0%,#72CCEE 55%,#B8E8FA 100%)',
-                backgroundAttachment: 'fixed', zIndex: 10,
-              }} />
-              <div style={{
-                position: 'absolute', right: -R, top: y - R,
-                width: R * 2, height: R * 2, borderRadius: '50%',
-                background: 'linear-gradient(180deg,#00A1E4 0%,#72CCEE 55%,#B8E8FA 100%)',
-                backgroundAttachment: 'fixed', zIndex: 10,
-              }} />
-            </div>
-          ))}
+        {/* ── BODY — CSS mask punches real ticket holes at the tear lines ── */}
+        <div
+          ref={cardBodyRef}
+          className="bg-[#EDF9FE] rounded-b-[14px] px-5 pt-7 pb-8 relative"
+          style={{
+            WebkitMaskImage: maskImage,
+            maskImage: maskImage,
+            WebkitMaskSize: '100% 100%',
+            maskSize: '100% 100%',
+            WebkitMaskRepeat: 'no-repeat',
+            maskRepeat: 'no-repeat',
+          }}
+        >
 
           {/* Route: 20s ─── 30s (no arrow) */}
           <div className="flex items-start gap-4 mb-5 px-1">

@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Page background — fixed so notch circles can mirror it */
-:root {
-  --bg-start: #00A1E4;
-  --bg-end:   #B8E8FA;
-}
-
 html, body, #root {
   min-height: 100%;
 }
@@ -15,8 +9,17 @@ html, body, #root {
 body {
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
-  background: linear-gradient(180deg, #00A1E4 0%, #72CCEE 55%, #B8E8FA 100%);
-  background-attachment: fixed;
+  background-color: #1aa3e0; /* fallback while image loads */
 }
 
-/* Tear line notches are created via CSS radial-gradient on the card body (see BoardingPass.jsx) */
+/* Fixed full-screen background image; ticket holes (CSS mask on the card body)
+   reveal this through the card. See BoardingPass.jsx. */
+.app-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url('/bg.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}

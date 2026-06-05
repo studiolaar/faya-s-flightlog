@@ -28,7 +28,7 @@ function PolaroidPile({ photos }) {
               top: `${s.top}%`,
               width: `${s.w}%`,
               transform: `rotate(${s.rot}deg)`,
-              padding: '3.5%',
+              padding: '2.2%',
               borderRadius: '4px 4px 16px 16px',
               boxShadow: '0 6px 14px rgba(0,0,0,0.22)',
               zIndex: i,
@@ -100,29 +100,29 @@ export default function StopoverOverlay({ stopover, onClose }) {
 
             {/* IATA + city pill */}
             <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between gap-3">
-              <span className="text-white font-mono font-bold drop-shadow-lg" style={{ fontSize: 'clamp(56px,13vw,84px)', lineHeight: 1 }}>
+              <span className="text-white font-mono font-bold drop-shadow-lg" style={{ fontSize: 'clamp(46px,11vw,68px)', lineHeight: 1 }}>
                 {stopover.iata}
               </span>
-              <span className="text-white font-sans text-[14px] tracking-[3px] px-5 py-2 rounded-full whitespace-nowrap" style={{ background: 'rgba(0,0,0,0.50)', backdropFilter: 'blur(2px)' }}>
+              <span className="text-white font-sans text-[12px] tracking-[2.5px] px-4 py-1.5 rounded-full whitespace-nowrap" style={{ background: 'rgba(0,0,0,0.50)', backdropFilter: 'blur(2px)' }}>
                 {stopover.city}
               </span>
             </div>
           </div>
 
           {/* ── Letter ── */}
-          <div className="px-8 sm:px-12 pt-9 pb-2">
+          <div className="px-7 sm:px-10 pt-8 pb-2">
             {letter.greeting && (
-              <p className="font-hand text-[32px] sm:text-[40px] text-[#1393c8] mb-3 leading-tight">{letter.greeting}</p>
+              <p className="font-hand text-[26px] sm:text-[30px] text-[#1393c8] mb-3 leading-tight">{letter.greeting}</p>
             )}
             {letter.body && letter.body.split('\n').map((line, i) => (
               line.trim()
-                ? <p key={i} className="font-hand text-[22px] sm:text-[26px] text-[#1393c8] leading-[1.6]">{line}</p>
-                : <div key={i} className="h-5" />
+                ? <p key={i} className="font-hand text-[18px] sm:text-[20px] text-[#1393c8] leading-[1.55]">{line}</p>
+                : <div key={i} className="h-4" />
             ))}
             {letter.signoff && (
               <div className="mt-5">
                 {letter.signoff.split('\n').map((line, i) => (
-                  <p key={i} className="font-hand text-[22px] sm:text-[26px] text-[#1393c8] leading-snug">{line}</p>
+                  <p key={i} className="font-hand text-[18px] sm:text-[20px] text-[#1393c8] leading-snug">{line}</p>
                 ))}
               </div>
             )}
