@@ -21,6 +21,7 @@ function PolaroidPile({ photos }) {
         return (
           <div
             key={i}
+            data-polaroid
             className="absolute bg-white"
             style={{
               left: `${s.left}%`,
@@ -33,7 +34,12 @@ function PolaroidPile({ photos }) {
             }}
           >
             <div className="w-full overflow-hidden" style={{ aspectRatio: '3 / 4' }}>
-              <img src={src} alt="" className="w-full h-full object-cover" />
+              <img
+                src={src}
+                alt=""
+                className="w-full h-full object-cover"
+                onError={(e) => { e.currentTarget.closest('[data-polaroid]').style.display = 'none' }}
+              />
             </div>
           </div>
         )
