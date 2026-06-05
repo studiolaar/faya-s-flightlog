@@ -75,8 +75,8 @@ export default function StopoverOverlay({ stopover, onClose }) {
         style={{ maxWidth: 720, background: '#EDF9FE', height: '90vh', maxHeight: 980 }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Scroll container */}
-        <div className="overflow-y-auto flex-1">
+        {/* Scroll container — clip X so rotated polaroids never cause sideways scroll */}
+        <div className="overflow-y-auto overflow-x-hidden flex-1">
 
           {/* ── Hero photo ── */}
           <div className="relative w-full flex-shrink-0" style={{ height: 340 }}>
