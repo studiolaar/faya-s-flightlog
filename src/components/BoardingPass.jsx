@@ -78,13 +78,14 @@ function OpenDestRow({ hint }) {
 export default function BoardingPass() {
   const [activeStopover, setActiveStopover] = useState(null)
 
-  // Refs for fluid scaling + notch measurement
-  const frameRef    = useRef(null)  // available-width container
-  const cardRef     = useRef(null)  // fixed BASE_W card that gets scaled
+  // Refs + state. Element sizes are fixed (Figma). On screens narrower than
+  // BASE_W the whole card scales DOWN to fit (never scales up past 1).
+  const frameRef    = useRef(null)
+  const cardRef     = useRef(null)
   const cardBodyRef = useRef(null)
   const tear1Ref    = useRef(null)
   const tear2Ref    = useRef(null)
-  const [scale, setScale] = useState(null)
+  const [scale, setScale] = useState(1)
   const [frameHeight, setFrameHeight] = useState(undefined)
   const [maskImage, setMaskImage] = useState(undefined)
 
@@ -92,21 +93,22 @@ export default function BoardingPass() {
     function measure() {
       if (!frameRef.current || !cardRef.current) return
       const availW = frameRef.current.clientWidth
-      const s = availW / BASE_W
-      const naturalH = cardRef.current.scrollHeight // layout height, ignores transform
+      // ≥ BASE_W: no scaling, card just fills the (wider) container at Figma sizes.
+      // < BASE_W: scale down so the fixed-size content fits the narrow screen.
+      const scaling = availW < BASE_W
+      const s = scaling ? availW / BASE_W : 1
       setScale(s)
-      setFrameHeight(naturalH * s)
+      setFrameHeight(scaling ? cardRef.current.scrollHeight * s : undefined)
 
-      // Build a mask that punches real ticket holes at the tear lines so the
-      // page background shows through (works on any bg, incl. iOS Safari).
+      // Ticket-hole mask (reveals the page background through the card edges).
       const body = cardBodyRef.current
       const t1 = tear1Ref.current, t2 = tear2Ref.current
       if (body && t1 && t2) {
-        const W = BASE_W
+        const W = Math.round(body.offsetWidth)
         const H = Math.round(body.offsetHeight)
         const y1 = Math.round(t1.offsetTop + t1.offsetHeight / 2)
         const y2 = Math.round(t2.offsetTop + t2.offsetHeight / 2)
-        const R = 11
+        const R = 12
         const hole = (cx, cy) =>
           `M ${cx - R} ${cy} a ${R} ${R} 0 1 0 ${2 * R} 0 a ${R} ${R} 0 1 0 ${-2 * R} 0 z`
         const d =
@@ -125,9 +127,10 @@ export default function BoardingPass() {
     return () => { window.removeEventListener('resize', measure); ro.disconnect() }
   }, [])
 
+  const scaling = scale < 1
+
   return (
     <>
-      {/* Frame holds the scaled card; its height tracks the scaled card height */}
       <div
         ref={frameRef}
         style={{ width: '100%', maxWidth: MAX_W, margin: '0 auto', height: frameHeight }}
@@ -136,9 +139,9 @@ export default function BoardingPass() {
         ref={cardRef}
         className="relative"
         style={{
-          width: BASE_W,
+          width: scaling ? BASE_W : '100%',
           transformOrigin: 'top left',
-          transform: scale ? `scale(${scale})` : undefined,
+          transform: scaling ? `scale(${scale})` : undefined,
         }}
       >
 
