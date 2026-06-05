@@ -16,7 +16,10 @@
       "Bash(git remote *)",
       "Bash(git branch *)",
       "Bash(git push *)",
-      "Bash(ls ~/.ssh/*.pub 2>&1)"
+      "Bash(ls ~/.ssh/*.pub 2>&1)",
+      "Read(//private/tmp/**)",
+      "Bash(curl -s -o faya_mobile.png \"https://www.figma.com/api/mcp/asset/71adf301-fd9e-4ce0-a067-c06ff7724133\")",
+      "Bash(curl -s -o faya_overlay.png \"https://www.figma.com/api/mcp/asset/6b59afea-2df1-448d-9e6b-31e0dc1d81af\")"
     ]
   }
 }

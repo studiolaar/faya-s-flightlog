@@ -96,24 +96,24 @@ export default function BoardingPass() {
   }, [])
 
   // Notch circle size
-  const R = 14 // px radius
+  const R = 11 // px radius
 
   return (
     <>
       <div className="relative w-full">
 
         {/* ── HEADER (sky blue) ──────────────────────────────────────────── */}
-        {/* overflow:visible so the badge can poke out to the right */}
-        <div className="bg-[#00A1E4] rounded-t-[14px] px-6 pt-9 pb-9 relative overflow-visible">
+        {/* overflow:visible + z-30 so the badge straddles the seam above the body */}
+        <div className="bg-[#00A1E4] rounded-t-[14px] px-6 pt-9 pb-9 relative overflow-visible" style={{ zIndex: 30 }}>
 
-          {/* "new destination" badge — positioned inside header, right side */}
+          {/* "new destination" badge — bottom-right, straddling header/body seam */}
           <div
             className="absolute z-20 flex items-center justify-center"
-            style={{ width: 96, height: 96, right: -10, top: 24 }}
+            style={{ width: 90, height: 90, right: -6, bottom: -45 }}
           >
             <img src={assets.newDestCircle} alt="" className="absolute inset-0 w-full h-full" />
             <img src={assets.newDestPlane}  alt="" className="absolute inset-0 w-full h-full object-contain p-3" />
-            <div className="relative z-10 text-center leading-tight" style={{ transform: 'rotate(13deg)', marginTop: 8 }}>
+            <div className="relative z-10 text-center leading-tight" style={{ transform: 'rotate(13deg)', marginTop: 6 }}>
               <span className="block font-mono text-[13px] font-bold text-white leading-none">new</span>
               <span className="block font-sans text-[9px] tracking-wide text-white">destination</span>
             </div>
