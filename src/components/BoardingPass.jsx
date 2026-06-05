@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { passenger, flightInfo, stopovers, openDestinations, assets } from '../data'
 import StopoverOverlay from './StopoverOverlay'
 
-// ─── KLM logo — white div masked by the logo shape (same as Figma) ───────────
+// ─── KLM logo — white div masked by the logo shape ───────────────────────────
 function KlmLogo() {
   return (
     <div
@@ -25,55 +25,32 @@ function KlmLogo() {
   )
 }
 
-// ─── Tear line with punch-out notch circles ───────────────────────────────────
-// The .notch class uses background-attachment:fixed with the same gradient
-// as the page body, making the circles look like holes in the card.
-function TearLine() {
+// ─── Tear line — just the dashed rule, no circles (cutouts are on the card) ──
+function TearLine({ innerRef }) {
   return (
-    <div className="relative flex items-center w-full my-2">
-      {/* left notch — half-circle hanging off the card edge */}
-      <div
-        className="notch absolute -left-[18px] w-[34px] h-[34px] rounded-full z-10 flex-shrink-0"
-        style={{ boxShadow: 'inset -2px 0 4px rgba(0,0,0,0.06)' }}
-      />
-      {/* dashed rule */}
+    <div ref={innerRef} className="relative flex items-center w-full my-2 py-1">
       <div
         className="w-full"
-        style={{
-          borderTop: '1.5px dashed rgba(120,137,153,0.35)',
-          margin: '0 2px',
-        }}
-      />
-      {/* right notch */}
-      <div
-        className="notch absolute -right-[18px] w-[34px] h-[34px] rounded-full z-10 flex-shrink-0"
-        style={{ boxShadow: 'inset 2px 0 4px rgba(0,0,0,0.06)' }}
+        style={{ borderTop: '1.5px dashed rgba(120,137,153,0.30)' }}
       />
     </div>
   )
 }
 
-// ─── Individual stopover row ──────────────────────────────────────────────────
+// ─── Stopover row ─────────────────────────────────────────────────────────────
 function StopoverRow({ stopover, onOpen }) {
   return (
     <button
       className="flex items-start gap-3 w-full text-left group"
       onClick={() => onOpen(stopover)}
     >
-      {/* Photo thumbnail */}
       <div className="w-[80px] h-[80px] rounded-[10px] overflow-hidden flex-shrink-0 bg-[#c8e9f5]">
         {stopover.photo && (
-          <img
-            src={stopover.photo}
-            alt={stopover.city}
-            className="w-full h-full object-cover"
-          />
+          <img src={stopover.photo} alt={stopover.city} className="w-full h-full object-cover" />
         )}
       </div>
-
-      {/* Text block */}
       <div className="flex-1 min-w-0 pt-1">
-        <p className="font-mono font-bold text-[#195FA5] text-[30px] leading-none lg:text-[34px]">
+        <p className="font-mono font-bold text-[#195FA5] text-[30px] leading-none">
           {stopover.iata}
         </p>
         <p className="font-sans text-[11px] text-[#788999] tracking-[2px] uppercase mt-1">
@@ -85,8 +62,6 @@ function StopoverRow({ stopover, onOpen }) {
           </p>
         )}
       </div>
-
-      {/* Arrow button */}
       <div className="w-10 h-10 rounded-full bg-[#00A1E4] flex items-center justify-center flex-shrink-0 mt-3 group-hover:bg-[#195FA5] transition-colors">
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
           <path d="M2.5 7.5H12.5M12.5 7.5L8 3M12.5 7.5L8 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -118,57 +93,67 @@ function OpenDestRow({ hint }) {
 export default function BoardingPass() {
   const [activeStopover, setActiveStopover] = useState(null)
 
+  // Refs to measure tear line Y positions inside the card body
+  const cardBodyRef = useRef(null)
+  const tear1Ref    = useRef(null)
+  const tear2Ref    = useRef(null)
+  const [notchPositions, setNotchPositions] = useState(null)
+
+  useEffect(() => {
+    function measure() {
+      if (!cardBodyRef.current || !tear1Ref.current || !tear2Ref.current) return
+      const cardRect = cardBodyRef.current.getBoundingClientRect()
+      const t1Rect   = tear1Ref.current.getBoundingClientRect()
+      const t2Rect   = tear2Ref.current.getBoundingClientRect()
+      setNotchPositions({
+        y1: Math.round(t1Rect.top + t1Rect.height / 2 - cardRect.top),
+        y2: Math.round(t2Rect.top + t2Rect.height / 2 - cardRect.top),
+      })
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
+
+  // Radial-gradient punches transparent semicircle cutouts at both tear lines.
+  // overflow:hidden on the card ensures only the inner half-circles are visible,
+  // letting the sky-blue page background show through — a real ticket punch-out.
+  const r = 13 // notch radius in px
+  const cardBg = notchPositions
+    ? `
+        radial-gradient(circle ${r}px at -1px ${notchPositions.y1}px, transparent ${r}px, #EDF9FE ${r}px),
+        radial-gradient(circle ${r}px at calc(100% + 1px) ${notchPositions.y1}px, transparent ${r}px, #EDF9FE ${r}px),
+        radial-gradient(circle ${r}px at -1px ${notchPositions.y2}px, transparent ${r}px, #EDF9FE ${r}px),
+        radial-gradient(circle ${r}px at calc(100% + 1px) ${notchPositions.y2}px, transparent ${r}px, #EDF9FE ${r}px),
+        #EDF9FE
+      `
+    : '#EDF9FE'
+
   return (
     <>
-      {/* Wrapper: overflow-hidden clips the card body but we need the notch
-          circles to escape — so we allow overflow on the inner body section */}
       <div className="relative w-full">
 
-        {/* ── "new destination" badge — sits at the header/body seam ── */}
+        {/* ── "new destination" badge ─────────────────────────────── */}
         <div
           className="absolute z-20 flex flex-col items-center justify-center"
-          style={{
-            width: 82,
-            height: 82,
-            right: -8,
-            top: 248,
-          }}
+          style={{ width: 82, height: 82, right: -8, top: 248 }}
         >
-          {/* Dark blue circle from Figma */}
-          <img
-            src={assets.newDestCircle}
-            alt=""
-            className="absolute inset-0 w-full h-full"
-          />
-          {/* Plane icon from Figma */}
-          <img
-            src={assets.newDestPlane}
-            alt=""
-            className="absolute inset-0 w-full h-full object-contain p-3"
-          />
-          {/* Text */}
-          <div
-            className="relative z-10 text-center leading-tight"
-            style={{ transform: 'rotate(13deg)' }}
-          >
+          <img src={assets.newDestCircle} alt="" className="absolute inset-0 w-full h-full" />
+          <img src={assets.newDestPlane}  alt="" className="absolute inset-0 w-full h-full object-contain p-3" />
+          <div className="relative z-10 text-center leading-tight" style={{ transform: 'rotate(13deg)' }}>
             <span className="block font-mono text-[12px] font-bold text-white leading-none">new</span>
             <span className="block font-sans text-[8px] tracking-wide text-white">destination</span>
           </div>
         </div>
 
-        {/* ── HEADER — sky blue ─────────────────────────────────────── */}
-        <div
-          className="bg-[#00A1E4] rounded-t-[14px] px-6 pt-9 pb-9 overflow-hidden"
-        >
-          {/* Logo + BOARDING PASS */}
+        {/* ── HEADER ─────────────────────────────────────────────── */}
+        <div className="bg-[#00A1E4] rounded-t-[14px] px-6 pt-9 pb-9 overflow-hidden">
           <div className="flex items-center justify-between mb-8">
             <KlmLogo />
             <span className="font-sans text-white text-[13px] tracking-[3.2px] uppercase">
               Boarding Pass
             </span>
           </div>
-
-          {/* Passenger row */}
           <div className="flex flex-col gap-3">
             <p className="font-sans text-white text-[13px] tracking-[3.2px] uppercase opacity-90">
               Passenger
@@ -179,18 +164,20 @@ export default function BoardingPass() {
                 alt={passenger.name}
                 className="w-14 h-14 rounded-full object-cover flex-shrink-0 border-2 border-white/30"
               />
-              <span className="font-mono font-bold text-white text-[28px] leading-none lg:text-[32px]">
+              <span className="font-mono font-bold text-white text-[28px] leading-none">
                 {passenger.name}
               </span>
             </div>
           </div>
         </div>
 
-        {/* ── BODY — light blue card ────────────────────────────────── */}
-        {/* overflow-visible so the notch circles can poke out the sides */}
-        <div className="bg-[#EDF9FE] rounded-b-[14px] px-5 pt-7 pb-8 overflow-visible">
-
-          {/* Route: 20s ——— 30s */}
+        {/* ── BODY — overflow:hidden + radial-gradient cutouts ───── */}
+        <div
+          ref={cardBodyRef}
+          className="rounded-b-[14px] overflow-hidden px-5 pt-7 pb-8"
+          style={{ background: cardBg }}
+        >
+          {/* Route: 20s ——→ 30s */}
           <div className="flex items-start gap-4 mb-5 px-1">
             <div className="flex-1 min-w-0">
               <p className="font-mono font-bold text-[#195FA5] text-[46px] leading-none">
@@ -200,7 +187,6 @@ export default function BoardingPass() {
                 {flightInfo.from.label}
               </p>
             </div>
-            {/* Arrow line */}
             <div className="flex-1 flex items-center gap-1 self-center mt-[-8px]">
               <div className="flex-1 border-t border-dashed border-[#788999]/40" />
               <svg width="14" height="10" viewBox="0 0 14 10" fill="none" className="flex-shrink-0">
@@ -225,19 +211,15 @@ export default function BoardingPass() {
               { label: 'SEAT', value: flightInfo.seat },
             ].map(({ label, value }) => (
               <div key={label} className="flex flex-col gap-[10px] px-3 py-4">
-                <span className="font-sans text-[10px] text-[#788999] tracking-[2.5px] uppercase">
-                  {label}
-                </span>
-                <span className="font-mono font-medium text-[#195FA5] text-[13px]">
-                  {value}
-                </span>
+                <span className="font-sans text-[10px] text-[#788999] tracking-[2.5px] uppercase">{label}</span>
+                <span className="font-mono font-medium text-[#195FA5] text-[13px]">{value}</span>
               </div>
             ))}
           </div>
 
-          {/* ── Tear line 1 ── */}
+          {/* Tear line 1 */}
           <div className="my-6 px-1">
-            <TearLine />
+            <TearLine innerRef={tear1Ref} />
           </div>
 
           {/* Stopovers */}
@@ -250,9 +232,9 @@ export default function BoardingPass() {
             ))}
           </div>
 
-          {/* ── Tear line 2 ── */}
+          {/* Tear line 2 */}
           <div className="my-6 px-1">
-            <TearLine />
+            <TearLine innerRef={tear2Ref} />
           </div>
 
           {/* Open destinations */}
@@ -265,9 +247,8 @@ export default function BoardingPass() {
             ))}
           </div>
 
-          {/* ── Footer: barcode + code ── */}
+          {/* Footer */}
           <div className="flex items-end justify-between mt-10 px-1">
-            {/* mix-blend-mode:multiply removes the white bg from the PNG */}
             <img
               src={assets.barcode}
               alt="Barcode"
@@ -281,12 +262,8 @@ export default function BoardingPass() {
         </div>
       </div>
 
-      {/* ── Overlay ── */}
       {activeStopover && (
-        <StopoverOverlay
-          stopover={activeStopover}
-          onClose={() => setActiveStopover(null)}
-        />
+        <StopoverOverlay stopover={activeStopover} onClose={() => setActiveStopover(null)} />
       )}
     </>
   )

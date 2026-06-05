@@ -19,9 +19,4 @@ body {
   background-attachment: fixed;
 }
 
-/* The notch circles on tear lines use the same fixed gradient so they
-   appear to cut through the card, revealing the background behind it. */
-.notch {
-  background: linear-gradient(180deg, #00A1E4 0%, #72CCEE 55%, #B8E8FA 100%);
-  background-attachment: fixed;
-}
+/* Tear line notches are created via CSS radial-gradient on the card body (see BoardingPass.jsx) */
