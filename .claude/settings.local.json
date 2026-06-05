@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__ac311f3f-5953-46a9-90fd-478f00e7b25c__get_design_context",
+      "mcp__ac311f3f-5953-46a9-90fd-478f00e7b25c__get_metadata",
+      "mcp__ac311f3f-5953-46a9-90fd-478f00e7b25c__get_screenshot",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3333)",
+      "Bash(codesign --sign - \"/Users/laravandersluijs/Library/Mobile Documents/com~apple~CloudDocs/Documents/Freelance/Mijn bedrijf/Claude/Faay cadeau/node_modules/@rollup/rollup-darwin-x64/rollup.darwin-x64.node\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(git --version)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}

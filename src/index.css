@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Page background — fixed so notch circles can mirror it */
+:root {
+  --bg-start: #00A1E4;
+  --bg-end:   #B8E8FA;
+}
+
+html, body, #root {
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: linear-gradient(180deg, #00A1E4 0%, #72CCEE 55%, #B8E8FA 100%);
+  background-attachment: fixed;
+}
+
+/* The notch circles on tear lines use the same fixed gradient so they
+   appear to cut through the card, revealing the background behind it. */
+.notch {
+  background: linear-gradient(180deg, #00A1E4 0%, #72CCEE 55%, #B8E8FA 100%);
+  background-attachment: fixed;
+}
