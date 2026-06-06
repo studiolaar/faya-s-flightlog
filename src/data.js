@@ -76,9 +76,18 @@ export const stopovers = [
       '/photos/ktt/6.jpeg',
     ],
     letter: {
-      greeting: 'Lieve Faay,',
-      body:     'Jouw tekst komt hier...',
-      signoff:  'Liefs, Jaad',
+      greeting: 'Bestemming: Finland 🇫🇮',
+      body: [
+        'Welkom aan boord van vlucht FI-030 richting Finland, een land waar de zon in de winter erg zeldzaam is.',
+        'Om je voor te bereiden, hier wat herinneringen van je reis in 2024. De reis begon goed: op kosten van Johan mochten we dit bijzondere stukje wereld ontdekken. Eenmaal aangekomen in het noorden kwamen we er al snel achter dat er met slechts een paar uur daglicht niet veel anders op zat dan vanaf een uur of drie ’s middags in de pub yätzy te spelen. Gelukkig zijn de Finnen volledig voorbereid op een leven in het donker.',
+        'Zo werden we getrakteerd op het hoogtepunt van de week: bingo. Geen doorsnee bingo, maar een bingo met spectaculaire prijzen zoals een ijsvishengel en een naaimachine. Helaas gingen we met lege handen naar huis, maar dromen mag altijd.',
+        'Tussen alle activiteiten door kan het zomaar gebeuren dat je in een hangmat belandt, midden in een besneeuwd bos bij -10 graden. Gelukkig is daar altijd de Hollandse Stephan en zijn vrouw Rita, die op een vuurtje een verse koffie voor je zetten zodat je langzaam weer gevoel krijgt in je vingers.',
+        'De dagen werden afgesloten zoals het hoort: met rendierstoof, een sauna en het gevoel dat je eigenlijk best goed bent ingeburgerd.',
+        'Finland bleek daarnaast een land vol fantasie. Van de kerstman tot elfen en complete fantasiewerelden in het bos: we hebben het allemaal gezien. Soms vraag je je af of de Finnen een beetje kierewiet zijn geworden van al die maanden donkerte, maar eerlijk is eerlijk: het maakt het wel gezellig.',
+        'En voor het slapengaan was er altijd nog één belangrijke taak: de aurora-app checken. Want misschien, heel misschien, zou het noorderlicht verschijnen. Als de KP-index goed was, stonden we binnen no-time bij de auto om ieder groen streepje aan de hemel te bewonderen.',
+        'Voor jouw volgende vlucht naar Finland wensen we je veel bessen, rendieren, bingo-overwinningen en natuurlijk een prachtig noorderlicht 🌲❄️',
+      ].join('\n\n'),
+      signoff: '',
     },
   },
   {
@@ -124,9 +133,14 @@ export const stopovers = [
       'https://www.figma.com/api/mcp/asset/2901ca88-8204-4dc2-8d5b-5858fbfd1a16',
     ],
     letter: {
-      greeting: 'Lieve Faay,',
-      body:     'Gefeliciteerd met je nieuwe bestemming.....\n\nstukje tekst hier\n\nblabla\n\nleuk leuk',
-      signoff:  'Liefs,\nLara',
+      greeting: 'Lieve schat,',
+      body: [
+        'Gefeliciteerd met je dirty thirty! Stiekem heel fijn dat jij als eerste van ons het voorbeeld geeft, want als jij op je 30e nog zo fabulous, jong en avontuurlijk door het leven gaat, hoeven wij ons voorlopig geen zorgen te maken. Het zit wel goed met ons allemaal. 😌',
+        'En avontuur, dat ga jij de komende tijd zeker niet tekort komen. Ik ben zo ontzettend trots op hoe je de afgelopen tijd je eigen pad hebt bewandeld. Grenzen aangeven op je oude werk, en dan ook echt de knoop doorhakken en je leven omgooien. Niet iedereen durft dat, maar jij wel! Je nieuwe bestemming: KLM. Zo exciting!! De outfit staat je in iedergeval amazinggg.',
+        'Zo blij met alle herinneringen die we de afgelopen jaren hebben gemaakt. Met de katjes, maar ook samen. En dan met name ons Bali avontuur 😍 Zon, zee, strand, en het nodige bijzondere volk zoals Melvin en Crispijn. Dropshippers die dachten dat ze de wereld begrepen, terwijl wij gewoon genoten van het leven. Hilarische avonden en afro parties in Da Maria en Mesa, eindeloos lachen met Tess en precies de juiste mensen op precies de verkeerde momenten tegenkomen. En dan natuurlijk onze spetterende avond bij Savaya (letterlijk ☔️) met Black Coffee. Ik denk er nog steeds aan terug met veel plezier. Dat was er eentje voor de boeken.',
+        'Hopelijk kunnen we komende jaren nog veel meer tripjes maken. Voor nu wens ik jou heel veel plezier en succes met jouw nieuwe bestemming. Ik kijk er nu al naar uit om al je verhalen te horen. En vlieg uiteraard graag een keer met je mee 🤩',
+      ].join('\n\n'),
+      signoff: 'Love you xxx\nLaar',
     },
   },
   {
@@ -144,9 +158,13 @@ export const stopovers = [
       '/photos/fco/5.jpeg',
     ],
     letter: {
-      greeting: 'Lieve Faay,',
-      body:     'Jouw tekst komt hier...',
-      signoff:  'Liefs, Sarah',
+      greeting: 'Lief lief mopje,',
+      body: [
+        'Van harte gefeliciteerd met je 30ste verjaardag 💕 Bye twentiesss, helllo dirty thirty!!! Wat een mooi jaar was het toch ook met o.a. een leuke trip naar Rome. Wat hebben we hier genoten met elkaar, het heeerlijke eten met goede wijntjes en met als kers op de taart, de kroegen tocht van onze vriend Marco (POLO!). De grootste lol gehad en mooie herinneringen gemaakt!',
+        'En nu ga jij mooie herinneringen maken in de lucht en bij prachtige nieuwe bestemmingen! Zo trots op hoe je het nu allemaal doet en waar je mee bezig bent, je bent een toppertje.',
+        'We proosten op jou en op een prachtig nieuw hoofdstuk!',
+      ].join('\n\n'),
+      signoff: 'Een hele dikke kus en heel veel liefs,\nSaar 💖',
     },
   },
 ]
