@@ -67,7 +67,14 @@ export const stopovers = [
     label:  'Jaad - Finland 2024',
     quote:  'Kou, lichten en avonturen in het hoge noorden',
     photo:  'https://www.figma.com/api/mcp/asset/6d02a3c3-fe2c-4224-8f89-3ee2df8b3ee4',
-    photos: [],
+    photos: [
+      '/photos/ktt/1.jpeg',
+      '/photos/ktt/2.jpeg',
+      '/photos/ktt/3.jpeg',
+      '/photos/ktt/4.jpeg',
+      '/photos/ktt/5.jpeg',
+      '/photos/ktt/6.jpeg',
+    ],
     letter: {
       greeting: 'Lieve Faay,',
       body:     'Jouw tekst komt hier...',
