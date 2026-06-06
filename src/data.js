@@ -33,7 +33,13 @@ export const stopovers = [
     label:  'Kyra - Dublin 2024',
     quote:  'Weekendje live muziek, baby guinness en gezelligheid',
     photo:  'https://www.figma.com/api/mcp/asset/64ea33a9-e301-4ff4-893d-26a301a79490',
-    photos: [],
+    photos: [
+      '/photos/dub/1.jpeg',
+      '/photos/dub/2.jpeg',
+      '/photos/dub/3.jpeg',
+      '/photos/dub/4.jpeg',
+      '/photos/dub/5.jpeg',
+    ],
     letter: {
       greeting: 'Lieve Faay,',
       body: [
@@ -123,7 +129,13 @@ export const stopovers = [
     label:  'Sarah - Rome 2025',
     quote:  'Pasta, piazze e pomeriggi perfetti sotto il sole',
     photo:  'https://www.figma.com/api/mcp/asset/cb29a677-45da-4807-86dc-17a1b9d16c80',
-    photos: [],
+    photos: [
+      '/photos/fco/1.jpeg',
+      '/photos/fco/2.jpeg',
+      '/photos/fco/3.jpeg',
+      '/photos/fco/4.jpeg',
+      '/photos/fco/5.jpeg',
+    ],
     letter: {
       greeting: 'Lieve Faay,',
       body:     'Jouw tekst komt hier...',
