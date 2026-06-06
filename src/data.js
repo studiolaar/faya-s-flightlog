@@ -122,15 +122,14 @@ export const stopovers = [
     city:   'Bali 2025',
     label:  'Lara - Bali 2025',
     quote:  'Savaya, dropshippers & taxi chachi avonturen',
-    photo:  'https://www.figma.com/api/mcp/asset/d697aa29-fc3b-4e19-a28b-b84cb134e5be',
-    // Demo polaroids from the Figma overlay — swap for Lara's real photos
+    photo:  '/photos/dps/hero.jpeg',
     photos: [
-      'https://www.figma.com/api/mcp/asset/90a55b60-cb4a-4d26-8586-8b233d4a9baf',
-      'https://www.figma.com/api/mcp/asset/134f1414-e821-43da-b30d-c6a2ab5bb092',
-      'https://www.figma.com/api/mcp/asset/6b1f2c85-d511-4e4c-a835-32ee03ec5d71',
-      'https://www.figma.com/api/mcp/asset/fbbf4b3b-af38-4566-84e8-08cc9bf33602',
-      'https://www.figma.com/api/mcp/asset/55638e2e-f3f0-46ee-8c10-fe1aa7ac9766',
-      'https://www.figma.com/api/mcp/asset/2901ca88-8204-4dc2-8d5b-5858fbfd1a16',
+      '/photos/dps/1.jpeg',
+      '/photos/dps/2.jpeg',
+      '/photos/dps/3.jpeg',
+      '/photos/dps/4.jpeg',
+      '/photos/dps/5.jpeg',
+      '/photos/dps/6.jpeg',
     ],
     letter: {
       greeting: 'Lieve schat,',

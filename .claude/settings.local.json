@@ -23,7 +23,12 @@
       "Bash(curl -s -o page.png \"https://www.figma.com/api/mcp/asset/01f5550a-fb54-4c45-847e-9dc1cdd0f6ff\")",
       "Bash(find . -name \"bg.png\" -not -path \"*/node_modules/*\")",
       "Bash(ls public/)",
-      "Bash(curl -s -o ov_desktop.png \"https://www.figma.com/api/mcp/asset/540a7e07-8225-467a-9726-296265426c7d\")"
+      "Bash(curl -s -o ov_desktop.png \"https://www.figma.com/api/mcp/asset/540a7e07-8225-467a-9726-296265426c7d\")",
+      "Bash(curl -s -o hero.jpeg \"https://www.figma.com/api/mcp/asset/d697aa29-fc3b-4e19-a28b-b84cb134e5be\")",
+      "Bash(curl -s -o 1.jpeg \"https://www.figma.com/api/mcp/asset/90a55b60-cb4a-4d26-8586-8b233d4a9baf\")",
+      "Bash(curl -s -o 2.jpeg \"https://www.figma.com/api/mcp/asset/134f1414-e821-43da-b30d-c6a2ab5bb092\")",
+      "Bash(curl -s -o 3.jpeg \"https://www.figma.com/api/mcp/asset/6b1f2c85-d511-4e4c-a835-32ee03ec5d71\")",
+      "Bash(curl -s -o 4.jpeg \"https://www.figma.com/api/mcp/asset/fbbf4b3b-af38-4566-84e8-08cc9bf33602\")"
     ]
   }
 }
