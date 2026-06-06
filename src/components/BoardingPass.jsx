@@ -6,6 +6,7 @@ import StopoverOverlay from './StopoverOverlay'
 // proportionally from this — narrower on mobile, up to MAX_W on desktop.
 const BASE_W = 390
 const MAX_W  = 720
+const ZOOM   = 1.1   // everything inside the card rendered 10% bigger
 
 // ─── KLM logo — white div masked by the logo shape ───────────────────────────
 function KlmLogo() {
@@ -85,7 +86,8 @@ export default function BoardingPass() {
   const cardBodyRef = useRef(null)
   const tear1Ref    = useRef(null)
   const tear2Ref    = useRef(null)
-  const [scale, setScale] = useState(1)
+  const [scale, setScale] = useState(ZOOM)
+  const [cardWidth, setCardWidth] = useState(BASE_W)
   const [frameHeight, setFrameHeight] = useState(undefined)
   const [maskImage, setMaskImage] = useState(undefined)
 
@@ -93,12 +95,16 @@ export default function BoardingPass() {
     function measure() {
       if (!frameRef.current || !cardRef.current) return
       const availW = frameRef.current.clientWidth
-      // ≥ BASE_W: no scaling, card just fills the (wider) container at Figma sizes.
-      // < BASE_W: scale down so the fixed-size content fits the narrow screen.
-      const scaling = availW < BASE_W
-      const s = scaling ? availW / BASE_W : 1
-      setScale(s)
-      setFrameHeight(scaling ? cardRef.current.scrollHeight * s : undefined)
+      // fit = 1 on wide screens (no shrink), < 1 on narrow screens (scale down).
+      // Multiplied by ZOOM so all content renders 10% bigger at every size.
+      const fit = Math.min(1, availW / BASE_W)
+      const eff = fit * ZOOM
+      // Render the card at availW/eff so that after the transform it visually
+      // fills the available width exactly (no overflow), with content 10% bigger.
+      const w = availW / eff
+      setScale(eff)
+      setCardWidth(w)
+      setFrameHeight(cardRef.current.scrollHeight * eff)
 
       // Ticket-hole mask (reveals the page background through the card edges).
       const body = cardBodyRef.current
@@ -127,8 +133,6 @@ export default function BoardingPass() {
     return () => { window.removeEventListener('resize', measure); ro.disconnect() }
   }, [])
 
-  const scaling = scale < 1
-
   return (
     <>
       <div
@@ -139,9 +143,9 @@ export default function BoardingPass() {
         ref={cardRef}
         className="relative"
         style={{
-          width: scaling ? BASE_W : '100%',
+          width: cardWidth,
           transformOrigin: 'top left',
-          transform: scaling ? `scale(${scale})` : undefined,
+          transform: `scale(${scale})`,
         }}
       >
 
@@ -168,12 +172,12 @@ export default function BoardingPass() {
             <span className="font-sans text-white text-[13px] tracking-[3.2px] uppercase">Boarding Pass</span>
           </div>
 
-          {/* Passenger */}
-          <div className="flex flex-col gap-3">
+          {/* Passenger — right padding reserves space for the badge */}
+          <div className="flex flex-col gap-3 pr-[84px]">
             <p className="font-sans text-white text-[13px] tracking-[3.2px] uppercase opacity-90">Passenger</p>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 min-w-0">
               <img src={passenger.avatar} alt={passenger.name} className="w-14 h-14 rounded-full object-cover flex-shrink-0 border-2 border-white/30" />
-              <span className="font-mono font-bold text-white text-[28px] leading-none">{passenger.name}</span>
+              <span className="font-mono font-bold text-white text-[28px] leading-none min-w-0">{passenger.name}</span>
             </div>
           </div>
         </div>
@@ -213,9 +217,9 @@ export default function BoardingPass() {
               { label: 'DATE', value: flightInfo.date },
               { label: 'SEAT', value: flightInfo.seat },
             ].map(({ label, value }) => (
-              <div key={label} className="flex flex-col gap-[10px] px-3 py-4">
+              <div key={label} className="flex flex-col gap-[10px] px-2.5 py-4">
                 <span className="font-sans text-[10px] text-[#788999] tracking-[2.5px] uppercase">{label}</span>
-                <span className="font-mono font-medium text-[#195FA5] text-[13px]">{value}</span>
+                <span className="font-mono font-medium text-[#195FA5] text-[13px] whitespace-nowrap">{value}</span>
               </div>
             ))}
           </div>
