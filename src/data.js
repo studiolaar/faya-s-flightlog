@@ -1,10 +1,10 @@
 // ─── Figma asset URLs (refreshed 2026-06-02) ─────────────────────────────────
 export const assets = {
-  klmLogoMask:   'https://www.figma.com/api/mcp/asset/ef7318d8-68ff-49cf-a098-64240b723f6d',
-  avatar:        'https://www.figma.com/api/mcp/asset/8a216ce4-dc43-474f-adff-09138ff7f3d1',
-  newDestCircle: 'https://www.figma.com/api/mcp/asset/85e394d6-e94c-478f-a97a-238ed9874652',
-  newDestPlane:  'https://www.figma.com/api/mcp/asset/0b4b33eb-518e-48a7-805e-0c43a550f66f',
-  barcode:       'https://www.figma.com/api/mcp/asset/d0fc5649-2ee0-4037-96fd-c11f4638fcbd',
+  klmLogoMask:   '/assets/klm-logo.png',
+  avatar:        '/assets/avatar.png',
+  newDestCircle: '/assets/badge-circle.svg',
+  newDestPlane:  '/assets/badge-plane.svg',
+  barcode:       '/assets/barcode.png',
 }
 
 export const passenger = {
@@ -32,7 +32,7 @@ export const stopovers = [
     city:   'Dublin 2024',
     label:  'Kyra - Dublin 2024',
     quote:  'Weekendje live muziek, baby guinness en gezelligheid',
-    photo:  'https://www.figma.com/api/mcp/asset/64ea33a9-e301-4ff4-893d-26a301a79490',
+    photo:  '/photos/dub/hero.jpeg',
     photos: [
       '/photos/dub/1.jpeg',
       '/photos/dub/2.jpeg',
@@ -66,7 +66,7 @@ export const stopovers = [
     city:   'Finland 2024',
     label:  'Jaad - Finland 2024',
     quote:  'Kou, lichten en avonturen in het hoge noorden',
-    photo:  'https://www.figma.com/api/mcp/asset/6d02a3c3-fe2c-4224-8f89-3ee2df8b3ee4',
+    photo:  '/photos/ktt/hero.jpeg',
     photos: [
       '/photos/ktt/1.jpeg',
       '/photos/ktt/2.jpeg',
@@ -96,7 +96,7 @@ export const stopovers = [
     city:   'Rio de Janeiro 2025',
     label:  'Maud - Rio de Janeiro 2025',
     quote:  "Carnaval, caipirinha's & de dirty thirty inluiden in Rio 🇧🇷",
-    photo:  'https://www.figma.com/api/mcp/asset/5545028a-3ef5-4a9f-b146-86b3cce945d5',
+    photo:  '/photos/gig/hero.jpeg',
     photos: [
       '/photos/gig/1.jpg',
       '/photos/gig/2.jpg',
@@ -148,7 +148,7 @@ export const stopovers = [
     city:   'Rome 2025',
     label:  'Sarah - Rome 2025',
     quote:  'Pasta, piazze e pomeriggi perfetti sotto il sole',
-    photo:  'https://www.figma.com/api/mcp/asset/cb29a677-45da-4807-86dc-17a1b9d16c80',
+    photo:  '/photos/fco/hero.jpeg',
     photos: [
       '/photos/fco/1.jpeg',
       '/photos/fco/2.jpeg',
