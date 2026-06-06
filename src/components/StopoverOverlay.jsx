@@ -1,50 +1,28 @@
 import { useEffect } from 'react'
 
-// Scattered polaroid pile — positions/rotations mirror the Figma overlay.
-// left/top are % of the collage container; width is % of container width.
-const SLOTS = [
-  { left: 4,  top: 28, w: 36, rot: -4.4 },
-  { left: 36, top: 0,  w: 37, rot: 1.5 },
-  { left: 26, top: 42, w: 33, rot: 2.0 },
-  { left: 64, top: 10, w: 35, rot: 10.8 },
-  { left: 60, top: 40, w: 37, rot: -5.6 },
-  { left: 6,  top: 6,  w: 31, rot: -7.9 },
-]
+const PHOTO_GAP = 8 // px gap between photos (Figma spec)
 
-function PolaroidPile({ photos }) {
-  const slots = SLOTS.slice(0, photos.length)
-  // Container aspect ratio roughly matches the Figma collage (835 x 680)
+// Infinite seamless marquee strip. Photos keep their own aspect ratio at a
+// fixed height; the set is duplicated and the track loops via CSS (-50%).
+function PhotoMarquee({ photos }) {
+  // Speed scales with photo count so px/sec stays roughly constant.
+  const duration = Math.max(20, photos.length * 6)
+  const loop = [...photos, ...photos]
   return (
-    <div className="relative w-full" style={{ aspectRatio: '835 / 700' }}>
-      {photos.map((src, i) => {
-        const s = slots[i]
-        return (
-          <div
+    <div className="w-full overflow-hidden">
+      <div className="marquee-track" style={{ '--marquee-duration': `${duration}s` }}>
+        {loop.map((src, i) => (
+          <img
             key={i}
-            data-polaroid
-            className="absolute bg-white"
-            style={{
-              left: `${s.left}%`,
-              top: `${s.top}%`,
-              width: `${s.w}%`,
-              transform: `rotate(${s.rot}deg)`,
-              padding: '2.2%',
-              borderRadius: '4px 4px 16px 16px',
-              boxShadow: '0 6px 14px rgba(0,0,0,0.22)',
-              zIndex: i,
-            }}
-          >
-            <div className="w-full overflow-hidden" style={{ aspectRatio: '3 / 4' }}>
-              <img
-                src={src}
-                alt=""
-                className="w-full h-full object-cover"
-                onError={(e) => { e.currentTarget.closest('[data-polaroid]').style.display = 'none' }}
-              />
-            </div>
-          </div>
-        )
-      })}
+            src={src}
+            alt=""
+            draggable={false}
+            className="h-[180px] sm:h-[240px] w-auto object-cover rounded-[10px] select-none flex-shrink-0"
+            style={{ marginRight: PHOTO_GAP }}
+            onError={(e) => { e.currentTarget.style.display = 'none' }}
+          />
+        ))}
+      </div>
     </div>
   )
 }
@@ -128,10 +106,10 @@ export default function StopoverOverlay({ stopover, onClose }) {
             )}
           </div>
 
-          {/* ── Polaroid pile ── */}
+          {/* ── Photo marquee (infinite loop) — full-bleed at the bottom ── */}
           {photos.length > 0 && (
-            <div className="px-6 sm:px-10 pt-8 pb-14">
-              <PolaroidPile photos={photos} />
+            <div className="pt-6 pb-12">
+              <PhotoMarquee photos={photos} />
             </div>
           )}
           {photos.length === 0 && <div className="h-10" />}

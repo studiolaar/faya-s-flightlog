@@ -22,7 +22,8 @@
       "Bash(curl -s -o faya_overlay.png \"https://www.figma.com/api/mcp/asset/6b59afea-2df1-448d-9e6b-31e0dc1d81af\")",
       "Bash(curl -s -o page.png \"https://www.figma.com/api/mcp/asset/01f5550a-fb54-4c45-847e-9dc1cdd0f6ff\")",
       "Bash(find . -name \"bg.png\" -not -path \"*/node_modules/*\")",
-      "Bash(ls public/)"
+      "Bash(ls public/)",
+      "Bash(curl -s -o ov_desktop.png \"https://www.figma.com/api/mcp/asset/540a7e07-8225-467a-9726-296265426c7d\")"
     ]
   }
 }

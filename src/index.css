@@ -12,6 +12,23 @@ body {
   background-color: #1aa3e0; /* fallback while image loads */
 }
 
+/* Infinite seamless marquee for the overlay photo strip.
+   Items carry their gap as margin-right, so translating the doubled track by
+   exactly -50% lines up perfectly with no jump. */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll var(--marquee-duration, 32s) linear infinite;
+  will-change: transform;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
 /* Fixed full-screen background image; ticket holes (CSS mask on the card body)
    reveal this through the card. See BoardingPass.jsx. */
 .app-bg {
