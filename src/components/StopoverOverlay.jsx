@@ -1,16 +1,43 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-const PHOTO_GAP = 8 // px gap between photos (Figma spec)
+const PHOTO_GAP = 8   // px gap between photos (Figma spec)
+const MARQUEE_SPEED = 28 // px per second — same feel on every screen size
 
 // Infinite seamless marquee strip. Photos keep their own aspect ratio at a
-// fixed height; the set is duplicated and the track loops via CSS (-50%).
+// fixed height; the set is duplicated and the track loops by exactly one set
+// width (measured in px), so the seam is invisible and stays stable while the
+// images are still loading. Duration is derived from the measured width so the
+// scroll speed (px/sec) is identical on mobile and desktop.
 function PhotoMarquee({ photos }) {
-  // Speed scales with photo count so px/sec stays roughly constant.
-  const duration = Math.max(20, photos.length * 6)
+  const trackRef = useRef(null)
+  const [vars, setVars] = useState({})
   const loop = [...photos, ...photos]
+
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+    function recalc() {
+      const setW = track.scrollWidth / 2
+      if (!setW) return
+      setVars({
+        '--marquee-shift': `${setW}px`,
+        '--marquee-duration': `${setW / MARQUEE_SPEED}s`,
+      })
+    }
+    recalc()
+    window.addEventListener('resize', recalc)
+    // ResizeObserver catches width changes as images finish loading
+    const ro = new ResizeObserver(recalc)
+    ro.observe(track)
+    track.querySelectorAll('img').forEach((img) => {
+      if (!img.complete) img.addEventListener('load', recalc, { once: true })
+    })
+    return () => { window.removeEventListener('resize', recalc); ro.disconnect() }
+  }, [photos])
+
   return (
     <div className="w-full overflow-hidden">
-      <div className="marquee-track" style={{ '--marquee-duration': `${duration}s` }}>
+      <div ref={trackRef} className="marquee-track" style={vars}>
         {loop.map((src, i) => (
           <img
             key={i}
@@ -19,7 +46,6 @@ function PhotoMarquee({ photos }) {
             draggable={false}
             className="h-[180px] sm:h-[240px] w-auto object-cover rounded-[10px] select-none flex-shrink-0"
             style={{ marginRight: PHOTO_GAP }}
-            onError={(e) => { e.currentTarget.style.display = 'none' }}
           />
         ))}
       </div>
